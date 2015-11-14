@@ -5,7 +5,7 @@
   var fnSuccess =
     function (data, startLineNum, endLineNum, callback) {
       if (data.data.content && data.data.encoding === "base64") {
-        var contentArray = 
+        var contentArray =
           window
             .atob(data.data.content.replace(/\n/g, ""))
             .split("\n");
@@ -49,4 +49,21 @@
         });
       }
     };
+
+    $.getGithubFileByFilePath2 =
+      function(filePath, callback, startLineNum, endLineNum) {
+        if(githubCacheFilePath[filePath]){
+            fnSuccess(githubCacheFilePath[filePath], +startLineNum || 1, +endLineNum || 0, callback);
+        }else{
+          $.ajax({
+            type: "GET"
+            ,url: "https://api.github.com/repos/" + filePath
+            ,dataType: "jsonp"
+            ,success: function(data){
+              githubCacheFilePath[filePath] = data;
+              fnSuccess(data, +startLineNum || 1, +endLineNum || 0, callback);
+            }
+          });
+        }
+      };
 }(jQuery));
