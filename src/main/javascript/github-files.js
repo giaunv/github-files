@@ -52,6 +52,7 @@
 
     $.getGithubFileByFilePath2 =
       function(filePath, callback, startLineNum, endLineNum) {
+        filePath = filePath.replace(/\/blob\/master/,'/contents');
         if(githubCacheFilePath[filePath]){
             fnSuccess(githubCacheFilePath[filePath], +startLineNum || 1, +endLineNum || 0, callback);
         }else{
