@@ -69,11 +69,11 @@
 
   $("code[class*=embedfile]").each(function(i, code){
     code = $(code);
-    var filepath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
-    var filename = /blob\/.*\/(.*)/.exec(filepath)[1];
+    var filePath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
+    var fileName = /blob\/.*\/(.*)/.exec(filePath)[1];
     filePath = filePath.replace(/\/blob\/.*/,'/contents');
-    $.getGithubFileByFilePath2(filepath, function(contents) {
-      $("<p><a target='_blank' href='" + "https://github.com/" + filepath + "'>" + filename + "</a></p>").insertBefore(code.parent());
+    $.getGithubFileByFilePath2(filePath, function(contents) {
+      $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>").insertBefore(code.parent());
       code.text(contents);
       if(Prism) Prism.highlightElement(code[0]);
     });
