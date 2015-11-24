@@ -91,9 +91,11 @@
       var filePath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
       var fileName = /blob\/[^/]*\/(.*)/.exec(filePath)[1];
       var linkToGithubFile = $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>");
-      filePath = filePath.replace(/\/github.com\/[^/]*\//,'/raw.githubusercontent.com/').replace(/\/blob\/[^/]*\//,'/');
 
-      $.get(filePath, null, function(contents) {
+      var fullFilePath = /embedfile-(.*)/i.exec(code.attr('class'))[1];
+      var rawFilePath = fullFilePath.replace(/\/github.com\/[^/]*\//,'/raw.githubusercontent.com/').replace(/\/blob\/[^/]*\//,'/');
+
+      $.get(rawFilePath, null, function(contents) {
         linkToGithubFile.insertBefore(code.parent());
         code.text(contents);
         if(window.Prism) Prism.highlightElement(code[0]);
