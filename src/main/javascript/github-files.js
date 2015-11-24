@@ -67,18 +67,39 @@
     }
   };
 
-  $("code[class*=embedfile]").each(function(i, code){
-    code = $(code);
+  $.embedFileFromAPI = function(){
+    $("code[class*=embedfile]").each(function(i, code){
+      code = $(code);
 
-    var filePath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
-    var fileName = /blob\/[^/]*\/(.*)/.exec(filePath)[1];
-    var linkToGithubFile = $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>");
-    filePath = filePath.replace(/\/blob\/[^/]*\//,'/contents/');
+      var filePath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
+      var fileName = /blob\/[^/]*\/(.*)/.exec(filePath)[1];
+      var linkToGithubFile = $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>");
+      filePath = filePath.replace(/\/blob\/[^/]*\//,'/contents/');
 
-    $.getGithubFileByFilePath2(filePath, function(contents) {
-      linkToGithubFile.insertBefore(code.parent());
-      code.text(contents);
-      if(window.Prism) Prism.highlightElement(code[0]);
+      $.getGithubFileByFilePath2(filePath, function(contents) {
+        linkToGithubFile.insertBefore(code.parent());
+        code.text(contents);
+        if(window.Prism) Prism.highlightElement(code[0]);
+      });
     });
-  });
+  }
+
+  $.embedFileFromRaw = function(){
+    $("code[class*=embedfile]").each(function(i, code){
+      code = $(code);
+
+      var filePath = /github.com\/(.*)/i.exec(code.attr('class'))[1];
+      var fileName = /blob\/[^/]*\/(.*)/.exec(filePath)[1];
+      var linkToGithubFile = $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>");
+      filePath = filePath.replace(/\/github.com\/[^/]*\//,'/raw.githubusercontent.com/').replace(/\/blob\/[^/]*\//,'/');
+
+      $.get(filePath, null, function(contents) {
+        linkToGithubFile.insertBefore(code.parent());
+        code.text(contents);
+        if(window.Prism) Prism.highlightElement(code[0]);
+      });
+    });
+  }
+
+  $.embedFileFromRaw();
 }(jQuery));
