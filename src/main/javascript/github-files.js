@@ -93,7 +93,7 @@
       var linkToGithubFile = $("<p><a target='_blank' href='" + "https://github.com/" + filePath + "'>" + fileName + "</a></p>");
 
       var fullFilePath = /embedfile-(.*)/i.exec(code.attr('class'))[1];
-      var rawFilePath = fullFilePath.replace(/\/github.com\/[^/]*\//,'/raw.githubusercontent.com/').replace(/\/blob\//,'/');
+      var rawFilePath = fullFilePath.replace(/\/github.com\//,'/raw.githubusercontent.com/').replace(/\/blob\//,'/');
 
       $.get(rawFilePath, null, function(contents) {
         linkToGithubFile.insertBefore(code.parent());
